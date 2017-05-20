@@ -25,7 +25,7 @@ GNU General Public License for more details.
 #define NEAR_SHADOW_EPSILON		1.5f
 #define SELF_SHADOW_EPSILON		0.5f
 
-#define STRUCT_FROM_LINK( l, t, m )	((t *)((byte *)l - (int)&(((t *)0)->m)))
+#define STRUCT_FROM_LINK( l, t, m )	((t *)((byte *)l - (int)(long int)&(((t *)0)->m)))
 #define FACET_FROM_AREA( l )		STRUCT_FROM_LINK( l, mfacet_t, area )
 #define bound( min, num, max )	((num) >= (min) ? ((num) < (max) ? (num) : (max)) : (min))
 

@@ -238,7 +238,7 @@ static winding_t* NewWinding(const int points)
     }
 
 #ifdef ZHLT_64BIT_FIX
-    size = (int)(int)((winding_t*)0)->points[points];
+    size = (int)(long int)((winding_t*)0)->points[points];
 #else
     size = (int)((winding_t*)0)->points[points];
 #endif
