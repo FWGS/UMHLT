@@ -10,6 +10,7 @@
 
 /////////////////////////////
 #ifdef SYSTEM_WIN32
+#ifdef __MSC_VER
 
 #define alloca      _alloca
 
@@ -42,8 +43,22 @@
 #define FORCEINLINE	__forceinline //--vluzacn
 #define FORMAT_PRINTF(STRING_INDEX,FIRST_TO_CHECK) //--vluzacn
 
+#else // mingw/clang
+#define rotl      _rotl
+#define rotr      _rotr
+
+#define STDCALL     __stdcall
+#define FASTCALL    __fastcall
+#define CDECL       __cdecl
+
+#define INLINE      __inline
+
+#define FORCEINLINE __inline__ __attribute__((always_inline))  //--vluzacn
+#define FORMAT_PRINTF(STRING_INDEX,FIRST_TO_CHECK)
+#endif
 #endif
 /////////////////////////////
+
 
 /////////////////////////////
 #ifdef SYSTEM_POSIX

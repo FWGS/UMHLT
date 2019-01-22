@@ -39,7 +39,7 @@ const size_t vector_size[vector_type_count] =
 
 void fail ()
 {
-	Error ("Compatability test failed. Please disable HLRAD_TRANSFERDATA_COMPRESS in cmdlib.h and recompile ZHLT.");
+	Warning ("Compatability test failed. Please disable HLRAD_TRANSFERDATA_COMPRESS in cmdlib.h and recompile ZHLT.");
 }
 
 void compress_compatability_test ()

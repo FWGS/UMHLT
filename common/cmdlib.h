@@ -361,7 +361,7 @@
 #define HLRAD_MATH_VL //--vluzacn
 	#ifdef HLRAD_NOSWAP
 	#ifdef HLRAD_TRANSWEIRDFIX
-#define HLRAD_TRANSFERDATA_COMPRESS //--vluzacn
+//#define HLRAD_TRANSFERDATA_COMPRESS //--vluzacn
 	#endif
 	#endif
 #define HLRAD_TRANCPARENCYLOSS_FIX //--vluzacn
@@ -616,8 +616,8 @@
 //=====================================================================
 
 #if _MSC_VER <1400
-#define strcpy_s strcpy //--vluzacn
-#define sprintf_s sprintf //--vluzacn
+//#define strcpy_s strcpy //--vluzacn
+#//define sprintf_s sprintf //--vluzacn
 #endif
 #if _MSC_VER >= 1400
 #pragma warning(disable: 4996)

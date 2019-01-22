@@ -6,10 +6,12 @@ else
 	SYSTEM=Other
 endif
 
+ARCH?=-m32
+
 ifeq ($(SYSTEM), Windows)
 	EXE=.exe
 	PLATFORM_DEFINES=-DSYSTEM_WIN32 -D_CONSOLE
-	PLATFORM_FLAGS=
+	PLATFORM_FLAGS= -static-libgcc -static-libstdc++ -flto -finline-limit=1024
 	RM=cmd /c del /F
 	RMR=cmd /c rd /S/Q
 	MKDIR=cmd /c md
@@ -17,6 +19,11 @@ ifeq ($(SYSTEM), Windows)
 	PATHSEP2=\\
 	PATHSEP=$(strip $(PATHSEP2))
 	CMDSEP=&
+	ifeq ($(ARCH),-m32)
+		PLATFORM_DEFINES += -DVERSION_32BIT
+	else ifeq ($(ARCH),-m64)
+		PLATFORM_DEFINES += -DVERSION_64BIT
+	endif
 else
 	EXE=
 	PLATFORM_DEFINES=-DSYSTEM_POSIX -DHAVE_SYS_TIME_H -DHAVE_UNISTD_H -DHAVE_SYS_STAT_H -DHAVE_FCNTL_H -DHAVE_SYS_RESOURCE_H -D_strdup=strdup -D_strlwr=strlwr -D_strupr=strupr -Dstricmp=strcasecmp -D_unlink=unlink -D_open=open -D_read=read -D_close=close
@@ -28,23 +35,22 @@ else
 	PATHSEP2=/
 	PATHSEP=$(strip $(PATHSEP2))
 	CMDSEP=;
+	ifeq ($(ARCH),-m32)
+		CHECKPLATFORM?=unix32
+		PLATFORM_DEFINES += -DVERSION_LINUX
+	else ifeq ($(ARCH),-m64)
+		CHECKPLATFORM?=unix64
+		PLATFORM_DEFINES += -DVERSION_LINUX -DVERSION_64BIT
+	endif
 endif
 
 CXX=g++
 
-ARCH?=-m32
-USER_FLAGS= -Ofast -funsafe-math-optimizations -funsafe-loop-optimizations -ffast-math -fgraphite-identity -march=native -mtune=native -msse4 -mavx -mavx2 -floop-interchange -mfpmath=sse -g
+USER_FLAGS= -Ofast -funsafe-math-optimizations -funsafe-loop-optimizations -ffast-math -fgraphite-identity -msse2 -msse3 -msse2 -msse -floop-interchange -mfpmath=sse
 CFLAGS=-Wint-to-pointer-cast $(USER_FLAGS)
 
 COMMON_DEFINES=-DSTDC_HEADERS $(PLATFORM_DEFINES) $(USER_DEFINES)
 
-ifeq ($(ARCH),-m32)
-	CHECKPLATFORM?=unix32
-	COMMON_DEFINES += -DVERSION_LINUX
-else ifeq ($(ARCH),-m64)
-	CHECKPLATFORM?=unix64
-	COMMON_DEFINES += -DVERSION_LINUX -DVERSION_64BIT
-endif
 
 CPPCHECK?=cppcheck
 CPPCHECKFLAGS= --enable=warning --enable=portability --platform=$(CHECKPLATFORM) --language=c++ -I common --force --quiet
