@@ -722,4 +722,11 @@ extern int      LittleLong(int l);
 extern float    BigFloat(float l);
 extern float    LittleFloat(float l);
 
+
+#define Q_max( a, b ) (((a) < (b)) ? (b) : (a))
+#define Q_min( a, b ) (((a) < (b)) ? (a) : (b))
+
+#ifndef _WIN32
+#define strnicmp strncasecmp
+#endif
 #endif //CMDLIB_H__

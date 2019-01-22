@@ -19,6 +19,10 @@ GNU General Public License for more details.
 #include "studio.h"
 #include "list.h"		// simple container
 
+#ifndef _WIN32
+#define _inline inline
+#endif
+
 #define AREA_NODES		32
 #define AREA_DEPTH		4
 
@@ -226,5 +230,10 @@ typedef struct model_s
 
 	CMeshDesc		mesh;		// cform
 } model_t;
+
+
+#ifndef _WIN32
+#undef _inline
+#endif
 
 #endif//MESHDESC_H

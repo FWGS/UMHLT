@@ -3,10 +3,11 @@
 //		         stringlib.cpp - safety string routines 
 //=======================================================================
 
+#ifdef _WIN32
 #include <windows.h>
-#include <math.h>
-#include "stringlib.h"
 #include <direct.h>
+#endif
+#include <math.h>
 #include "stringlib.h"
 #include "cmdlib.h"
 
@@ -284,6 +285,10 @@ char *Q_stristr( const char *string, const char *string2 )
 	return (char *)string;
 }
 
+#ifndef _WIN32
+#define _vsnprintf vsnprintf
+#endif
+
 int Q_vsnprintf( char *buffer, size_t buffersize, const char *format, va_list args )
 {
 	size_t	result;
@@ -383,7 +388,7 @@ char *Q_pretifymem( float value, int digitsafterdecimal )
 	else Q_sprintf( suffix, " bytes" );
 
 	// clamp to >= 0
-	digitsafterdecimal = max( digitsafterdecimal, 0 );
+	digitsafterdecimal = Q_max( digitsafterdecimal, 0 );
 
 	// if it's basically integral, don't do any decimals
 	if( fabs( value - (int)value ) < 0.00001 )

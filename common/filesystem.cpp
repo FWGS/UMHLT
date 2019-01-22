@@ -14,10 +14,15 @@ GNU General Public License for more details.
 */
 
 #include <fcntl.h>
-#include <direct.h>
 #include <sys/stat.h>
+#ifdef _WIN32
+#include <direct.h>
 #include <windows.h>
 #include <io.h>
+#else
+#define O_BINARY 0
+#include <dirent.h>
+#endif
 #include <time.h>
 #include "cmdlib.h"
 #include "messages.h"
@@ -254,16 +259,34 @@ static void stringlistsort( stringlist_t *list )
 	}
 }
 
+#ifndef _WIN32
+int sel(const struct dirent *d)
+{
+	int plen, extlen;
+	const char* p = strrchr(d->d_name, '.');
+	if ( !p ) return 0;
+	plen = strlen(p);
+	extlen = strlen("*");
+	return strncmp("*", p, (extlen < plen) ? extlen : plen) == 0;
+}
+#endif
+
+
 static void listdirectory( stringlist_t *list, const char *path )
 {
-	char		pattern[4096];
-	struct _finddata_t	n_file;
-	long		hFile;
-	char		*c;
 	int		i;
+	signed char *c;
+#ifdef _WIN32
+	char pattern[4096];
+	struct _finddata_t	n_file;
+	int		hFile;
+#else
+	DIR *dir;
+	struct dirent *entry;
+#endif
 
-	Q_strncpy( pattern, path, sizeof( pattern ));
-	Q_strncat( pattern, "*", sizeof( pattern ));
+#ifdef _WIN32
+	Q_snprintf( pattern, sizeof( pattern ), "%s*", path );
 
 	// ask for the directory listing handle
 	hFile = _findfirst( pattern, &n_file );
@@ -275,14 +298,17 @@ static void listdirectory( stringlist_t *list, const char *path )
 	while( _findnext( hFile, &n_file ) == 0 )
 		stringlistappend( list, n_file.name );
 	_findclose( hFile );
+#else
+	if( !( dir = opendir( path ) ) )
+		return;
 
-	// convert names to lowercase because windows doesn't care, but pattern matching code often does
-	for( i = 0; i < list->numstrings; i++ )
-	{
-		for( c = list->strings[i]; *c; c++ )
-			*c = Q_tolower( *c );
-	}
+	// iterate through the directory
+	while( ( entry = readdir( dir ) ))
+		stringlistappend( list, entry->d_name );
+	closedir( dir );
+#endif
 }
+
 
 /*
 =============================================================================
@@ -1083,9 +1109,28 @@ Look for a existing folder
 */
 bool FS_SysFolderExists( const char *path )
 {
-	long	dwFlags = GetFileAttributes( path );
+#ifdef _WIN32
+	DWORD	dwFlags = GetFileAttributes( path );
 
 	return ( dwFlags != -1 ) && ( dwFlags & FILE_ATTRIBUTE_DIRECTORY );
+#else
+	DIR *dir = opendir( path );
+
+	if( dir )
+	{
+		closedir( dir );
+		return 1;
+	}
+	else if( (errno == ENOENT) || (errno == ENOTDIR) )
+	{
+		return 0;
+	}
+	else
+	{
+		Warning( "FS_SysFolderExists: problem while opening dir: %s\n", strerror(errno) );
+		return 0;
+	}
+#endif
 }
 
 /*

@@ -33,7 +33,7 @@ endif
 CXX=g++
 
 ARCH?=-m32
-USER_FLAGS= -Ofast -funsafe-math-optimizations -funsafe-loop-optimizations -ffast-math -fgraphite-identity -march=native -mtune=native -msse4 -mavx -floop-interchange -mfpmath=sse -g
+USER_FLAGS= -Ofast -funsafe-math-optimizations -funsafe-loop-optimizations -ffast-math -fgraphite-identity -march=native -mtune=native -msse4 -mavx -mavx2 -floop-interchange -mfpmath=sse -g
 CFLAGS=-Wint-to-pointer-cast $(USER_FLAGS)
 
 COMMON_DEFINES=-DSTDC_HEADERS $(PLATFORM_DEFINES) $(USER_DEFINES)
