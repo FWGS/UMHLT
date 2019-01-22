@@ -118,7 +118,7 @@
 #define HLCSG_WADCFG
 #define HLCSG_WADCFG_NEW // rewritten HLCSG_WADCFG. --vluzacn
 #define HLCSG_AUTOWAD
-#define HLCSG_SKYFIXEDSTYLE	// g-cont
+//#define HLCSG_SKYFIXEDSTYLE	// g-cont
 #define HLCSG_PRECISIONCLIP
 #define HLCSG_FASTFIND
 #define HLCSG_PLANE_HASHING
