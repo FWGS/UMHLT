@@ -1897,7 +1897,7 @@ void GetTriangulationPatches (int facenum, int *numpatches, const int **patches)
 
 	facetrian = g_facetriangulations[facenum];
 	*numpatches = (int)facetrian->usedpatches.size ();
-	#if (_MSC_VER == 1600)
+	#if !defined __MSC_VER ||  _MSC_VER >= 1600
 		*patches =	  &facetrian->usedpatches.front();
 	#else
 		*patches =	  facetrian->usedpatches.begin();
