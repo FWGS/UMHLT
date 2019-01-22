@@ -1181,7 +1181,7 @@ bbrinkinfo_t;
 
 #define MAXCLIPNODES (MAX_MAP_CLIPNODES*8)
 
-bclipnode_t *ExpandClipnodes_r (bclipnode_t *bclipnodes, int &numbclipnodes, const dclipnode_t *clipnodes, int headnode)
+bclipnode_t *ExpandClipnodes_r (bclipnode_t *bclipnodes, int &numbclipnodes, const dclipnode32_t *clipnodes, int headnode)
 {
 	if (numbclipnodes >= MAXCLIPNODES)
 	{
@@ -1208,7 +1208,7 @@ bclipnode_t *ExpandClipnodes_r (bclipnode_t *bclipnodes, int &numbclipnodes, con
 	return c;
 }
 
-void ExpandClipnodes (bbrinkinfo_t *info, const dclipnode_t *clipnodes, int headnode)
+void ExpandClipnodes (bbrinkinfo_t *info, const dclipnode32_t *clipnodes, int headnode)
 {
 	bclipnode_t *bclipnodes = (bclipnode_t *)malloc (MAXCLIPNODES * sizeof (bclipnode_t)); // 262144 * 30byte = 7.5MB
 	hlassume (bclipnodes != NULL, assume_NoMemory);
@@ -1862,7 +1862,7 @@ void SortPartitions (bbrinkinfo_t *info) // to merge same partition planes and c
 	Developer (DEVELOPER_LEVEL_MESSAGE, "partitions: floorblocking = %d floor = %d wallblocking = %d wall = %d any = %d\n", countfloorblocking, countfloor, countwallblocking, countwall, countany);
 }
 
-void *CreateBrinkinfo (const dclipnode_t *clipnodes, int headnode)
+void *CreateBrinkinfo (const dclipnode32_t *clipnodes, int headnode)
 {
 	bbrinkinfo_t *info;
 	try
@@ -1886,13 +1886,13 @@ void *CreateBrinkinfo (const dclipnode_t *clipnodes, int headnode)
 #ifdef HLBSP_MERGECLIPNODE
 extern int count_mergedclipnodes;
 typedef std::map< std::pair< int, std::pair< int, int > >, int > clipnodemap_t;
-inline clipnodemap_t::key_type MakeKey (const dclipnode_t &c)
+inline clipnodemap_t::key_type MakeKey (const dclipnode32_t &c)
 {
 	return std::make_pair (c.planenum, std::make_pair (c.children[0], c.children[1]));
 }
 #endif
 
-bool FixBrinks_r_r (const bclipnode_t *clipnode, const bpartition_t *p, bbrinklevel_e level, int &headnode_out, dclipnode_t *begin, dclipnode_t *end, dclipnode_t *&current
+bool FixBrinks_r_r (const bclipnode_t *clipnode, const bpartition_t *p, bbrinklevel_e level, int &headnode_out, dclipnode32_t *begin, dclipnode32_t *end, dclipnode32_t *&current
 #ifdef HLBSP_MERGECLIPNODE
 					, clipnodemap_t *outputmap
 #endif
@@ -1907,11 +1907,11 @@ bool FixBrinks_r_r (const bclipnode_t *clipnode, const bpartition_t *p, bbrinkle
 		headnode_out = clipnode->content;
 		return true;
 	}
-	dclipnode_t *cn;
+	dclipnode32_t *cn;
 #ifdef HLBSP_MERGECLIPNODE
-	dclipnode_t tmpclipnode;
+	dclipnode32_t tmpclipnode;
 	cn = &tmpclipnode;
-	dclipnode_t *c = current;
+	dclipnode32_t *c = current;
 	current++;
 #else
 	if (current >= end)
@@ -1962,7 +1962,7 @@ bool FixBrinks_r_r (const bclipnode_t *clipnode, const bpartition_t *p, bbrinkle
 	return true;
 }
 
-bool FixBrinks_r (const bclipnode_t *clipnode, bbrinklevel_e level, int &headnode_out, dclipnode_t *begin, dclipnode_t *end, dclipnode_t *&current
+bool FixBrinks_r (const bclipnode_t *clipnode, bbrinklevel_e level, int &headnode_out, dclipnode32_t *begin, dclipnode32_t *end, dclipnode32_t *&current
 #ifdef HLBSP_MERGECLIPNODE
 				, clipnodemap_t *outputmap
 #endif
@@ -1978,11 +1978,11 @@ bool FixBrinks_r (const bclipnode_t *clipnode, bbrinklevel_e level, int &headnod
 	}
 	else
 	{
-		dclipnode_t *cn;
+		dclipnode32_t *cn;
 #ifdef HLBSP_MERGECLIPNODE
-		dclipnode_t tmpclipnode;
+		dclipnode32_t tmpclipnode;
 		cn = &tmpclipnode;
-		dclipnode_t *c = current;
+		dclipnode32_t *c = current;
 		current++;
 #else
 		if (current >= end)
@@ -2036,12 +2036,12 @@ bool FixBrinks_r (const bclipnode_t *clipnode, bbrinklevel_e level, int &headnod
 	}
 }
 
-bool FixBrinks (const void *brinkinfo, bbrinklevel_e level, int &headnode_out, dclipnode_t *clipnodes_out, int maxsize, int size, int &size_out)
+bool FixBrinks (const void *brinkinfo, bbrinklevel_e level, int &headnode_out, dclipnode32_t *clipnodes_out, int maxsize, int size, int &size_out)
 {
 	const bbrinkinfo_t *info = (const bbrinkinfo_t *)brinkinfo;
-	dclipnode_t *begin = clipnodes_out;
-	dclipnode_t *end = &clipnodes_out[maxsize];
-	dclipnode_t *current = &clipnodes_out[size];
+	dclipnode32_t *begin = clipnodes_out;
+	dclipnode32_t *end = &clipnodes_out[maxsize];
+	dclipnode32_t *current = &clipnodes_out[size];
 #ifdef HLBSP_MERGECLIPNODE
 	clipnodemap_t outputmap;
 #endif

@@ -3,18 +3,12 @@
 //		         stringlib.cpp - safety string routines 
 //=======================================================================
 
-#ifdef _WIN32
 #include <windows.h>
-#endif
 #include <math.h>
 #include "stringlib.h"
-#ifdef _WIN32
 #include <direct.h>
-#endif
 #include "stringlib.h"
 #include "cmdlib.h"
-#define Q_max(a, b) ((a) > (b) ? (a) : (b))
-
 
 void Q_strnupr( const char *in, char *out, size_t size_out )
 {
@@ -294,7 +288,7 @@ int Q_vsnprintf( char *buffer, size_t buffersize, const char *format, va_list ar
 {
 	size_t	result;
 
-	result = vsnprintf( buffer, buffersize, format, args );
+	result = _vsnprintf( buffer, buffersize, format, args );
 
 	if( result < 0 || result >= buffersize )
 	{
@@ -389,7 +383,7 @@ char *Q_pretifymem( float value, int digitsafterdecimal )
 	else Q_sprintf( suffix, " bytes" );
 
 	// clamp to >= 0
-	digitsafterdecimal = Q_max( digitsafterdecimal, 0 );
+	digitsafterdecimal = max( digitsafterdecimal, 0 );
 
 	// if it's basically integral, don't do any decimals
 	if( fabs( value - (int)value ) < 0.00001 )

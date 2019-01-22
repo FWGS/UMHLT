@@ -171,7 +171,7 @@ void            ResetErrorLog()
     }
 }
 
-void  CheckForErrorLog()
+void            CheckForErrorLog()
 {
     if (g_log)
     {
@@ -328,8 +328,8 @@ void            Safe_WriteLog(const char* const message)
         if (!*c)
             return; // end of string
 
-        if (*c == '\n')
-            fputc('\r', CompileLog);
+//        if (*c == '\n')
+//            fputc('\r', CompileLog);
 
         fputc(*c, CompileLog);
 

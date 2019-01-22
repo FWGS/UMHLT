@@ -123,8 +123,8 @@
       <StackCommitSize>1048576</StackCommitSize>
     </Link>
     <CustomBuildStep>
-      <Command>copy $(TargetDir)hlcsg.exe "..\hlcsg31.exe"</Command>
-      <Outputs>..\hlcsg31.exe;%(Outputs)</Outputs>
+      <Command>copy $(TargetDir)hlcsg.exe "..\hlcsg30.exe"</Command>
+      <Outputs>..\hlcsg30.exe;%(Outputs)</Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -165,8 +165,8 @@
       <StackCommitSize>1048576</StackCommitSize>
     </Link>
     <CustomBuildStep>
-      <Command>copy $(TargetDir)hlcsg.exe "..\hlcsg31.exe"</Command>
-      <Outputs>..\hlcsg31.exe;%(Outputs)</Outputs>
+      <Command>copy $(TargetDir)hlcsg.exe "..\hlcsg30.exe"</Command>
+      <Outputs>..\hlcsg30.exe;%(Outputs)</Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -211,8 +211,8 @@
       <StackCommitSize>1048576</StackCommitSize>
     </Link>
     <CustomBuildStep>
-      <Command>copy $(TargetDir)hlcsg.exe "..\hlcsg31.exe"</Command>
-      <Outputs>..\hlcsg31.exe;%(Outputs)</Outputs>
+      <Command>copy $(TargetDir)hlcsg.exe "..\hlcsg30.exe"</Command>
+      <Outputs>..\hlcsg30.exe;%(Outputs)</Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -256,8 +256,8 @@
       <StackCommitSize>1048576</StackCommitSize>
     </Link>
     <CustomBuildStep>
-      <Command>copy $(TargetDir)hlcsg.exe "..\hlcsg31.exe"</Command>
-      <Outputs>..\hlcsg31.exe;%(Outputs)</Outputs>
+      <Command>copy $(TargetDir)hlcsg.exe "..\hlcsg30.exe"</Command>
+      <Outputs>..\hlcsg30.exe;%(Outputs)</Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>

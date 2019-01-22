@@ -1,5 +1,4 @@
 #include "vis.h"
-#include "stringlib.h"
 
 /*
 
@@ -90,21 +89,21 @@ void CalcAmbientSounds( void )
 				ofs = ((dmiptexlump_t *)g_dtexdata)->dataofs[info->miptex];
 				miptex = (miptex_t *)(&g_dtexdata[ofs]);
 
-				if( !Q_strnicmp( miptex->name, "sky", 3 ))
+				if( !strnicmp( miptex->name, "sky", 3 ))
 				{
 					ambient_type = AMBIENT_SKY;
 				}
 				else if( miptex->name[0] == '!' )
 				{
-					if( !Q_strnicmp( miptex->name, "!water", 6 ))
+					if( !strnicmp( miptex->name, "!water", 6 ))
 					{
 						ambient_type = AMBIENT_WATER;
 					}
-					else if( !Q_strnicmp( miptex->name, "!slime", 6 ))
+					else if( !strnicmp( miptex->name, "!slime", 6 ))
 					{
 						ambient_type = AMBIENT_SLIME;
 					}
-					else if( !Q_strnicmp(miptex->name, "!lava", 6 ))
+					else if( !strnicmp(miptex->name, "!lava", 6 ))
 					{
 						ambient_type = AMBIENT_LAVA;
 					}

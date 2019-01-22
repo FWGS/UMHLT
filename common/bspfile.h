@@ -37,6 +37,7 @@
 // hard limit (negative short's are used as contents values)
 #define MAX_MAP_CLIPNODES		32767
 // hard limit (negative short's are used as contents values)
+#define MAX_MAP_CLIPNODES32		262144		// can be increased but not needed
 
 #ifdef ZHLT_MAX_MAP_LEAFS
 #define MAX_MAP_LEAFS		32760
@@ -113,11 +114,7 @@
 #endif
 //=============================================================================
 
-#ifdef ZHLT_XASH2
-#define BSPVERSION		31
-#else
 #define BSPVERSION		30
-#endif
 #define TOOLVERSION		2
 
 #ifdef ZHLT_PARANOIA_BSP
@@ -126,13 +123,8 @@
 				// ver. 3 was occupied by experimental versions of P2:savior change fmt
 #endif
 
-#ifdef ZHLT_XASH2
-#define TEXTURE_STEP        8
-#define MAX_SURFACE_EXTENT  64
-#else
 #define TEXTURE_STEP        16 // this constant was previously defined in lightmap.cpp. --vluzacn
 #define MAX_SURFACE_EXTENT  16 // if lightmap extent exceeds 16, the map will not be able to load in 'Software' renderer and HLDS. //--vluzacn
-#endif
 
 #ifdef ZHLT_PARANOIA_BSP
 #define MIN_CUSTOM_SURFACE_EXTENT	8
@@ -167,13 +159,7 @@ typedef struct
 #define LUMP_EDGES		12
 #define LUMP_SURFEDGES	13
 #define LUMP_MODELS		14
-#ifdef ZHLT_XASH2
-#define LUMP_CLIPNODES2	15
-#define LUMP_CLIPNODES3	16
-#define HEADER_LUMPS	17
-#else
 #define HEADER_LUMPS	15
-#endif
 
 #ifdef ZHLT_PARANOIA_BSP
 #define LUMP_LIGHTVECS		0	// deluxemap data
@@ -290,6 +276,12 @@ typedef struct
 	int		planenum;
 	short		children[2];	// negative numbers are contents
 } dclipnode_t;
+
+typedef struct
+{
+	int	planenum;
+	int	children[2];		// negative numbers are contents
+} dclipnode32_t;
 
 typedef struct texinfo_s
 {
@@ -481,15 +473,10 @@ extern int      g_numfaces;
 extern dface_t  g_dfaces[MAX_MAP_FACES];
 extern int      g_dfaces_checksum;
 
-#ifdef ZHLT_XASH2
-extern int      g_numclipnodes[MAX_MAP_HULLS - 1];
-extern dclipnode_t g_dclipnodes[MAX_MAP_HULLS - 1][MAX_MAP_CLIPNODES];
-extern int      g_dclipnodes_checksum[MAX_MAP_HULLS - 1];
-#else
-extern int      g_numclipnodes;
-extern dclipnode_t g_dclipnodes[MAX_MAP_CLIPNODES];
-extern int      g_dclipnodes_checksum;
-#endif
+extern int      		g_numclipnodes;
+extern dclipnode_t		g_dclipnodes[MAX_MAP_CLIPNODES];
+extern dclipnode32_t	g_dclipnodes32[MAX_MAP_CLIPNODES32];
+extern int		g_dclipnodes_checksum;
 
 extern int      g_numedges;
 extern dedge_t  g_dedges[MAX_MAP_EDGES];

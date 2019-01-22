@@ -48,10 +48,11 @@
 #define MIN_MAXNODE_SIZE        64
 #ifdef ZHLT_LARGERANGE
 #define MAX_MAXNODE_SIZE        65536
+#define DEFAULT_MAXNODE_SIZE    2048
 #else
 #define MAX_MAXNODE_SIZE        8192
+#define DEFAULT_MAXNODE_SIZE    1024
 #endif
-#define DEFAULT_MAXNODE_SIZE    8192
 
 #define DEFAULT_NOFILL          false
 #ifdef HLBSP_FILL
@@ -323,8 +324,8 @@ typedef enum
 	BrinkWall,
 	BrinkAny,
 } bbrinklevel_e;
-extern void *CreateBrinkinfo (const dclipnode_t *clipnodes, int headnode);
-extern bool FixBrinks (const void *brinkinfo, bbrinklevel_e level, int &headnode_out, dclipnode_t *clipnodes_out, int maxsize, int size, int &size_out);
+extern void *CreateBrinkinfo (const dclipnode32_t *clipnodes, int headnode);
+extern bool FixBrinks (const void *brinkinfo, bbrinklevel_e level, int &headnode_out, dclipnode32_t *clipnodes_out, int maxsize, int size, int &size_out);
 extern void DeleteBrinkinfo (void *brinkinfo);
 #endif
 

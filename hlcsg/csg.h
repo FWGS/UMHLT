@@ -326,7 +326,8 @@ short FaceinfoForTexinfo( const char *landname, const int in_texture_step, const
 extern brush_t* Brush_LoadEntity(entity_t* ent, int hullnum);
 extern contents_t CheckBrushContents(const brush_t* const b);
 
-extern void     CreateBrush(int brushnum);
+extern void CreateBrush(int brushnum);
+
 #ifdef HLCSG_HULLBRUSH
 extern void		CreateHullShape (int entitynum, bool disabled, const char *id, int defaulthulls);
 extern void		InitDefaultHulls ();

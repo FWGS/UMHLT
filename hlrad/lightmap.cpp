@@ -6438,7 +6438,7 @@ void            BuildFacelights(const int facenum)
 	#else
 				for (j = 0; j < MAXLIGHTMAPS && f->styles[j] != 255; j++)
 				{
-					VectorAdd (facelight[facenum].samples[j][i].light, weighting, l.lmcache[pos][j], facelight[facenum].samples[j][i].light);
+					VectorMA (facelight[facenum].samples[j][i].light, weighting, l.lmcache[pos][j], facelight[facenum].samples[j][i].light);
 				}
 	#endif
 				subsamples += weighting;
@@ -8891,6 +8891,7 @@ void FinalLightFace( const int facenum )
             		if (g_numbounce)//LRC && (k == 0))
 #endif
 			{
+				vec3_t v;
 				SampleTriangulation(trian, samp->pos, v, 
 	#ifdef ZHLT_XASH
 					v_direction, 

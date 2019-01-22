@@ -141,8 +141,8 @@
       <StackCommitSize>1048576</StackCommitSize>
     </Link>
     <CustomBuildStep>
-      <Command>copy $(TargetDir)hlrad.exe "..\hlrad31.exe"</Command>
-      <Outputs>..\hlrad31.exe;%(Outputs)</Outputs>
+      <Command>copy $(TargetDir)hlrad.exe "..\hlrad30.exe"</Command>
+      <Outputs>..\hlrad30.exe;%(Outputs)</Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -186,8 +186,8 @@
       <StackCommitSize>1048576</StackCommitSize>
     </Link>
     <CustomBuildStep>
-      <Command>copy $(TargetDir)hlrad.exe "..\hlrad31.exe"</Command>
-      <Outputs>..\hlrad31.exe;%(Outputs)</Outputs>
+      <Command>copy $(TargetDir)hlrad.exe "..\hlrad30.exe"</Command>
+      <Outputs>..\hlrad30.exe;%(Outputs)</Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -228,8 +228,8 @@
       <StackCommitSize>1048576</StackCommitSize>
     </Link>
     <CustomBuildStep>
-      <Command>copy $(TargetDir)hlrad.exe "..\hlrad31.exe"</Command>
-      <Outputs>..\hlrad31.exe;%(Outputs)</Outputs>
+      <Command>copy $(TargetDir)hlrad.exe "..\hlrad30.exe"</Command>
+      <Outputs>..\hlrad30.exe;%(Outputs)</Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -270,8 +270,8 @@
       <StackCommitSize>1048576</StackCommitSize>
     </Link>
     <CustomBuildStep>
-      <Command>copy $(TargetDir)hlrad.exe "..\hlrad31.exe"</Command>
-      <Outputs>..\hlrad31.exe;%(Outputs)</Outputs>
+      <Command>copy $(TargetDir)hlrad.exe "..\hlrad30.exe"</Command>
+      <Outputs>..\hlrad30.exe;%(Outputs)</Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>

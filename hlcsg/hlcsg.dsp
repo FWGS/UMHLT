@@ -58,8 +58,8 @@ TargetDir=\VHLT\temp\hlcsg\!release
 InputPath=\VHLT\temp\hlcsg\!release\hlcsg.exe
 SOURCE="$(InputPath)"
 
-"..\hlcsg31.exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(TargetDir)\hlcsg.exe "..\hlcsg31.exe"
+"..\hlcsg30.exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(TargetDir)\hlcsg.exe "..\hlcsg30.exe"
 
 # End Custom Build
 
@@ -96,8 +96,8 @@ TargetDir=\VHLT\temp\hlcsg\!debug
 InputPath=\VHLT\temp\hlcsg\!debug\hlcsg.exe
 SOURCE="$(InputPath)"
 
-"..\hlcsg31.exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(TargetDir)\hlcsg.exe "..\hlcsg31.exe"
+"..\hlcsg30.exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(TargetDir)\hlcsg.exe "..\hlcsg30.exe"
 
 # End Custom Build
 

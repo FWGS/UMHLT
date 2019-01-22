@@ -1070,10 +1070,12 @@ int             TexinfoForBrushTexture(const plane_t* const plane, brush_texture
 #endif
 #endif
 #ifndef HLCSG_AUTOWAD_NEW
+#ifdef HLCSG_AUTOWAD
 #ifdef HLCSG_AUTOWAD_TEXTURELIST_FIX
 	ThreadLock ();
 	autowad_PushName (bt->name);
 	ThreadUnlock ();
+#endif
 #endif
 #endif
 #ifdef HLCSG_TEXMAP64_FIX

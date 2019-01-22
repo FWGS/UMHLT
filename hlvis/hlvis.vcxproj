@@ -137,8 +137,8 @@
       <StackCommitSize>1048576</StackCommitSize>
     </Link>
     <CustomBuildStep>
-      <Command>copy $(TargetDir)hlvis.exe "..\hlvis31.exe"</Command>
-      <Outputs>..\hlvis31.exe;%(Outputs)</Outputs>
+      <Command>copy $(TargetDir)hlvis.exe "..\hlvis30.exe"</Command>
+      <Outputs>..\hlvis30.exe;%(Outputs)</Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -179,8 +179,8 @@
       <StackCommitSize>1048576</StackCommitSize>
     </Link>
     <CustomBuildStep>
-      <Command>copy $(TargetDir)hlvis.exe "..\hlvis31.exe"</Command>
-      <Outputs>..\hlvis31.exe;%(Outputs)</Outputs>
+      <Command>copy $(TargetDir)hlvis.exe "..\hlvis30.exe"</Command>
+      <Outputs>..\hlvis30.exe;%(Outputs)</Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -225,8 +225,8 @@
       <StackCommitSize>1048576</StackCommitSize>
     </Link>
     <CustomBuildStep>
-      <Command>copy $(TargetDir)hlvis.exe "..\hlvis31.exe"</Command>
-      <Outputs>..\hlvis31.exe;%(Outputs)</Outputs>
+      <Command>copy $(TargetDir)hlvis.exe "..\hlvis30.exe"</Command>
+      <Outputs>..\hlvis30.exe;%(Outputs)</Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -270,8 +270,8 @@
       <StackCommitSize>1048576</StackCommitSize>
     </Link>
     <CustomBuildStep>
-      <Command>copy $(TargetDir)hlvis.exe "..\hlvis31.exe"</Command>
-      <Outputs>..\hlvis31.exe;%(Outputs)</Outputs>
+      <Command>copy $(TargetDir)hlvis.exe "..\hlvis30.exe"</Command>
+      <Outputs>..\hlvis30.exe;%(Outputs)</Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>

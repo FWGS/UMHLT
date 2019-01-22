@@ -66,15 +66,10 @@ int		g_numfaces;
 dface_t		g_dfaces[MAX_MAP_FACES];
 int		g_dfaces_checksum;
 
-#ifdef ZHLT_XASH2
-int		g_numclipnodes[MAX_MAP_HULLS - 1];
-dclipnode_t	g_dclipnodes[MAX_MAP_HULLS - 1][MAX_MAP_CLIPNODES];
-int		g_dclipnodes_checksum[MAX_MAP_HULLS - 1];
-#else
 int		g_numclipnodes;
 dclipnode_t	g_dclipnodes[MAX_MAP_CLIPNODES];
+dclipnode32_t	g_dclipnodes32[MAX_MAP_CLIPNODES32];
 int		g_dclipnodes_checksum;
-#endif
 
 int		g_numedges;
 dedge_t		g_dedges[MAX_MAP_EDGES];
@@ -391,24 +386,12 @@ static void SwapBSPFile( const bool todisk )
 	//
 	// clipnodes
 	//
-#ifdef ZHLT_XASH2
-	for( int hull = 1; hull < MAX_MAP_HULLS; hull++ )
-	{
-		for( i = 0; i < g_numclipnodes[hull - 1]; i++ )
-		{
-			g_dclipnodes[hull - 1][i].planenum = LittleLong( g_dclipnodes[hull - 1][i].planenum );
-			g_dclipnodes[hull - 1][i].children[0] = LittleShort( g_dclipnodes[hull - 1][i].children[0] );
-			g_dclipnodes[hull - 1][i].children[1] = LittleShort( g_dclipnodes[hull - 1][i].children[1] );
-		}
-	}
-#else
 	for( i = 0; i < g_numclipnodes; i++ )
 	{
-		g_dclipnodes[i].planenum = LittleLong( g_dclipnodes[i].planenum );
-		g_dclipnodes[i].children[0] = LittleShort( g_dclipnodes[i].children[0] );
-		g_dclipnodes[i].children[1] = LittleShort( g_dclipnodes[i].children[1] );
+		g_dclipnodes32[i].planenum = LittleLong( g_dclipnodes32[i].planenum );
+		g_dclipnodes32[i].children[0] = LittleLong( g_dclipnodes32[i].children[0] );
+		g_dclipnodes32[i].children[1] = LittleLong( g_dclipnodes32[i].children[1] );
 	}
-#endif
 
 	//
 	// miptex
@@ -582,6 +565,44 @@ static int CopyExtraLump( int lump, void* dest, int size, const dheader_t* const
 }
 #endif
 
+static int CopyLumpClipnodes( const dheader_t* const header, int lump )
+{
+	int length = header->lumps[lump].filelen;
+	int ofs = header->lumps[lump].fileofs;
+	bool clipnodes_compatible = true;
+	int size;
+
+	if(( length % sizeof( dclipnode_t )) || ( length / sizeof( dclipnode_t )) >= MAX_MAP_CLIPNODES )
+		clipnodes_compatible = false;
+
+	if( clipnodes_compatible )
+	{
+		// compatible 16-bit clipnodes
+		size = sizeof( dclipnode_t );
+		memcpy( g_dclipnodes, (byte *)header + ofs, length );
+
+		// share clipnodes with 32-bit array
+		for( int i = 0; i < (length / size); i++ )
+		{
+			g_dclipnodes32[i].children[0] = g_dclipnodes[i].children[0];
+			g_dclipnodes32[i].children[1] = g_dclipnodes[i].children[1];
+			g_dclipnodes32[i].planenum = g_dclipnodes[i].planenum;
+		}
+	}
+	else
+	{
+#ifdef ZHLT_XASH2
+		// extended 32-bit clipnodes
+		size = sizeof( dclipnode32_t );
+		memcpy( g_dclipnodes32, (byte *)header + ofs, length );
+#else
+		Error( "LoadBSPFile: odd lump size" );
+#endif
+	}
+
+	return length / size;
+}
+
 // =====================================================================================
 //  LoadBSPFile
 //      balh
@@ -619,27 +640,7 @@ void LoadBSPImage( dheader_t* const header )
 	g_numleafs = CopyLump( LUMP_LEAFS, g_dleafs, sizeof( dleaf_t ), header );
 	g_numnodes = CopyLump( LUMP_NODES, g_dnodes, sizeof( dnode_t ), header );
 	g_numtexinfo = CopyLump( LUMP_TEXINFO, g_texinfo, sizeof( texinfo_t ), header );
-
-#ifdef ZHLT_XASH2
-	for( hull = 1; hull < MAX_MAP_HULLS; hull++ )
-	{
-		int lump;
-
-		switch( hull )
-		{
-		case 1: lump = LUMP_CLIPNODES; break;
-		case 2: lump = LUMP_CLIPNODES2; break;
-		case 3: lump = LUMP_CLIPNODES3; break;
-		default:
-			Error( "bad hull number %d", hull );
-			break;
-		}
-
-		g_numclipnodes[hull - 1] = CopyLump( lump, g_dclipnodes[hull - 1], sizeof( dclipnode_t ), header );
-	}
-#else
-	g_numclipnodes = CopyLump( LUMP_CLIPNODES, g_dclipnodes, sizeof( dclipnode_t ), header );
-#endif
+	g_numclipnodes = CopyLumpClipnodes( header, LUMP_CLIPNODES );
 	g_numfaces = CopyLump( LUMP_FACES, g_dfaces, sizeof( dface_t ), header );
 	g_nummarksurfaces = CopyLump( LUMP_MARKSURFACES, g_dmarksurfaces, sizeof( g_dmarksurfaces[0] ), header );
 	g_numsurfedges = CopyLump( LUMP_SURFEDGES, g_dsurfedges, sizeof( g_dsurfedges[0] ), header );
@@ -688,15 +689,7 @@ void LoadBSPImage( dheader_t* const header )
 	g_dleafs_checksum = FastChecksum( g_dleafs, g_numleafs * sizeof( g_dleafs[0] ));
 	g_dnodes_checksum = FastChecksum( g_dnodes, g_numnodes * sizeof( g_dnodes[0] ));
 	g_texinfo_checksum = FastChecksum( g_texinfo, g_numtexinfo * sizeof( g_texinfo[0] ));
-
-#ifdef ZHLT_XASH2
-	for( hull = 1; hull < MAX_MAP_HULLS; hull++ )
-	{
-		g_dclipnodes_checksum[hull - 1] = FastChecksum( g_dclipnodes[hull - 1], g_numclipnodes[hull - 1] * sizeof( g_dclipnodes[hull - 1][0] ));
-	}
-#else
-	g_dclipnodes_checksum = FastChecksum( g_dclipnodes, g_numclipnodes * sizeof( g_dclipnodes[0] ));
-#endif
+	g_dclipnodes_checksum = FastChecksum( g_dclipnodes32, g_numclipnodes * sizeof( g_dclipnodes32[0] ));
 	g_dfaces_checksum = FastChecksum( g_dfaces, g_numfaces * sizeof( g_dfaces[0] ));
 	g_dmarksurfaces_checksum = FastChecksum( g_dmarksurfaces, g_nummarksurfaces * sizeof( g_dmarksurfaces[0] ));
 	g_dsurfedges_checksum = FastChecksum( g_dsurfedges, g_numsurfedges * sizeof( g_dsurfedges[0] ));
@@ -745,6 +738,36 @@ static void AddExtraLump( int lumpnum, void* data, int len, dextrahdr_t* header,
 }
 #endif
 
+void AddLumpClipnodes( dheader_t* header, FILE* bspfile, int lumpnum )
+{
+	lump_t *lump = &header->lumps[lumpnum];
+	lump->fileofs = ftell( bspfile );
+
+	if( g_numclipnodes < MAX_MAP_CLIPNODES )
+	{
+		// copy clipnodes into 16-bit array
+		for( int i = 0; i < g_numclipnodes; i++ )
+		{
+			g_dclipnodes[i].children[0] = (short)g_dclipnodes32[i].children[0];
+			g_dclipnodes[i].children[1] = (short)g_dclipnodes32[i].children[1];
+			g_dclipnodes[i].planenum = g_dclipnodes32[i].planenum;
+		}
+
+		lump->filelen = g_numclipnodes * sizeof( dclipnode_t );
+		SafeWrite( bspfile, g_dclipnodes, (lump->filelen + 3) & ~3 );
+	}
+	else
+	{
+#ifdef ZHLT_XASH2
+		// copy clipnodes into 32-bit array
+		lump->filelen = g_numclipnodes * sizeof( dclipnode32_t );
+		SafeWrite( bspfile, g_dclipnodes32, (lump->filelen + 3) & ~3 );
+#else
+		Error( "WriteBSPFile: MAX_MAP_CLIPNODES limit exceeded" );
+#endif
+	}
+}
+
 // =====================================================================================
 //  WriteBSPFile
 //      Swaps the bsp file in place, so it should not be referenced again
@@ -785,25 +808,7 @@ void WriteBSPFile( const char* const filename )
 	AddLump( LUMP_NODES,        g_dnodes,        g_numnodes * sizeof( dnode_t ),         header, bspfile );
 	AddLump( LUMP_TEXINFO,      g_texinfo,       g_numtexinfo * sizeof( texinfo_t ),     header, bspfile );
 	AddLump( LUMP_FACES,        g_dfaces,        g_numfaces * sizeof( dface_t ),         header, bspfile );
-#ifdef ZHLT_XASH2
-	for( int hull = 1; hull < MAX_MAP_HULLS; hull++ )
-	{
-		int lump;
-
-		switch( hull )
-		{
-		case 1: lump = LUMP_CLIPNODES; break;
-		case 2: lump = LUMP_CLIPNODES2; break;
-		case 3: lump = LUMP_CLIPNODES3; break;
-		default:
-			Error( "bad hull number %d", hull );
-			break;
-		}
-		AddLump( lump, g_dclipnodes[hull - 1], g_numclipnodes[hull - 1] * sizeof( dclipnode_t ), header, bspfile );
-	}
-#else
-	AddLump( LUMP_CLIPNODES,    g_dclipnodes,    g_numclipnodes * sizeof( dclipnode_t ), header, bspfile );
-#endif
+	AddLumpClipnodes( header, bspfile, LUMP_CLIPNODES );
 	AddLump( LUMP_MARKSURFACES, g_dmarksurfaces, g_nummarksurfaces * sizeof( short ),    header, bspfile );
 	AddLump( LUMP_SURFEDGES,    g_dsurfedges,    g_numsurfedges * sizeof( int ),         header, bspfile );
 	AddLump( LUMP_EDGES,        g_dedges,        g_numedges * sizeof( dedge_t ),         header, bspfile );
@@ -857,9 +862,7 @@ static void CorrectFPUPrecision ()
 		unsigned int val = (currentcontrol & _MCW_PC);
 		if (val != _PC_53)
 		{
-			#ifdef _DEBUG
-				Warning ("FPU precision is %s. Setting to %s.", (val == _PC_24? "24": val == _PC_64? "64": "invalid"), "53");
-			#endif
+			Warning ("FPU precision is %s. Setting to %s.", (val == _PC_24? "24": val == _PC_64? "64": "invalid"), "53");
 			if (_controlfp_s (&currentcontrol, _PC_53, _MCW_PC)
 				|| (currentcontrol & _MCW_PC) != _PC_53)
 			{
@@ -1436,16 +1439,7 @@ void PrintBSPFileSizes( void )
 #ifdef ZHLT_WARNWORLDFACES
 	totalmemory += ArrayUsage( "* worldfaces", (g_nummodels > 0 ? g_dmodels[0].numfaces: 0 ), MAX_MAP_WORLDFACES, 0 );
 #endif
-#ifdef ZHLT_XASH2
-	for( int hull = 1; hull < MAX_MAP_HULLS; hull++ )
-	{
-		char buffer[32];
-		sprintf( buffer, "clipnodes%d", hull );
-		totalmemory += ArrayUsage( buffer, g_numclipnodes[hull - 1], ENTRIES( g_dclipnodes[hull - 1] ), ENTRYSIZE( g_dclipnodes[hull - 1] ));
-	}
-#else
 	totalmemory += ArrayUsage( "clipnodes", g_numclipnodes, ENTRIES( g_dclipnodes ), ENTRYSIZE( g_dclipnodes ));
-#endif
 #ifdef ZHLT_MAX_MAP_LEAFS
 	totalmemory += ArrayUsage( "leaves", g_numleafs, MAX_MAP_LEAFS, ENTRYSIZE( g_dleafs ));
 	totalmemory += ArrayUsage( "* worldleaves", ( g_nummodels > 0 ? g_dmodels[0].visleafs : 0 ), MAX_MAP_LEAFS_ENGINE, 0 );

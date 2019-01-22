@@ -320,6 +320,7 @@ int CreateNewIntPlane( const vec_t* const srcnormal, const vec_t* const origin )
 	vec3_t normal;
 	vec_t dist;
 	planetypes type;
+	bool snapped = false;
 
 	if( VectorLength( srcnormal ) < 0.5 )
 		return -1;
@@ -330,8 +331,15 @@ int CreateNewIntPlane( const vec_t* const srcnormal, const vec_t* const origin )
 	p0 = &g_mapplanes[g_nummapplanes+0];
 	p1 = &g_mapplanes[g_nummapplanes+1];
 	VectorCopy( srcnormal, normal );
+#ifdef ZHLT_PLANETYPE_FIX2
+	VectorNormalize( normal );
+#endif
 	type = PlaneTypeForNormal( normal );
+#ifdef ZHLT_PLANETYPE_FIX2
+	dist = DotProduct( origin, srcnormal );
+#else
 	dist = DotProduct( origin, normal );
+#endif
 #ifdef ZHLT_PLANETYPE_FIX
 	// snap normal to nearest axial if possible
 	if( type <= last_axial )
@@ -343,6 +351,21 @@ int CreateNewIntPlane( const vec_t* const srcnormal, const vec_t* const origin )
 			else normal[i] = 0;
 		}
 	}
+#ifdef ZHLT_PLANETYPE_FIX2
+	else
+	{
+		for( int i = 0; i < 3; i++ )
+		{
+			if( fabs( fabs( normal[i] ) - 0.707106 ) < DIR_EPSILON )
+			{
+				normal[i] = normal[i] > 0 ? 0.707106 : -0.707106;
+				snapped = true;
+			}
+		}
+
+		if( snapped ) VectorNormalize( normal );
+	}
+#endif
 #endif
 	p0->origin[0] = origin[0];
 	p0->origin[1] = origin[1];

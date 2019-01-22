@@ -738,7 +738,6 @@ extern unsigned g_num_patches;
 
 extern int      leafparents[MAX_MAP_LEAFS];
 extern int      nodeparents[MAX_MAP_NODES];
-extern float    g_trace_fraction;
 extern float    g_lightscale;
 extern float    g_dlight_threshold;
 extern float    g_coring;
@@ -925,13 +924,13 @@ extern int      TestLine(const vec3_t start, const vec3_t stop
 #ifdef HLRAD_OPAQUEINSKY_FIX
 						 , vec_t *skyhitout = NULL
 #endif
-						 );
+						 , vec_t *fraction = NULL );
 #ifndef HLRAD_WATERBLOCKLIGHT
 extern int      TestLine_r(int node, float p1f, float p2f, const vec3_t start, const vec3_t stop
 #ifdef HLRAD_OPAQUEINSKY_FIX
 						   , vec_t *skyhitout = NULL
 #endif
-						   );
+						   , vec_t *fraction = NULL );
 #endif
 #ifdef HLRAD_OPAQUE_NODE
 #define OPAQUE_NODE_INLINECALL

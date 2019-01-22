@@ -327,7 +327,7 @@ int TestLine_r( const int node, float p1f, float p2f, const vec3_t start, const 
 #ifdef HLRAD_OPAQUEINSKY_FIX
 						   , vec_t *skyhit
 #endif
-						   )
+						   , vec_t *fraction )
 {
     tnode_t*        tnode;
     float           front, back;
@@ -413,7 +413,7 @@ int TestLine_r( const int node, float p1f, float p2f, const vec3_t start, const 
 #ifdef HLRAD_OPAQUEINSKY_FIX
 			, skyhit
 #endif
-			);
+			, fraction );
 	}
 	if (front < -ON_EPSILON/2 && back < -ON_EPSILON/2)
 	{
@@ -424,7 +424,7 @@ int TestLine_r( const int node, float p1f, float p2f, const vec3_t start, const 
 #ifdef HLRAD_OPAQUEINSKY_FIX
 			, skyhit
 #endif
-			);
+			, fraction );
 	}
 	if (fabs(front) <= ON_EPSILON && fabs(back) <= ON_EPSILON)
 	{
@@ -435,7 +435,7 @@ int TestLine_r( const int node, float p1f, float p2f, const vec3_t start, const 
 #ifdef HLRAD_OPAQUEINSKY_FIX
 			, skyhit
 #endif
-			);
+			, fraction );
 		if (r1 == CONTENTS_SOLID)
 			return CONTENTS_SOLID;
 		int r2 = TestLine_r(tnode->children[1], p1f, p2f, start, stop
@@ -445,7 +445,7 @@ int TestLine_r( const int node, float p1f, float p2f, const vec3_t start, const 
 #ifdef HLRAD_OPAQUEINSKY_FIX
 			, skyhit
 #endif
-			);
+			, fraction );
 		if (r2 == CONTENTS_SOLID)
 			return CONTENTS_SOLID;
 		if (r1 == CONTENTS_SKY || r2 == CONTENTS_SKY)
@@ -467,10 +467,11 @@ int TestLine_r( const int node, float p1f, float p2f, const vec3_t start, const 
 #ifdef HLRAD_OPAQUEINSKY_FIX
 		, skyhit
 #endif
-		);
+		, fraction );
 	if (r != CONTENTS_EMPTY)
 	{
-		g_trace_fraction = midf;
+		if( fraction )
+			*fraction = midf;
 		return r;
 	}
 	return TestLine_r(tnode->children[!side], midf, p2f, mid, stop
@@ -480,7 +481,7 @@ int TestLine_r( const int node, float p1f, float p2f, const vec3_t start, const 
 #ifdef HLRAD_OPAQUEINSKY_FIX
 		, skyhit
 #endif
-		);
+		, fraction );
 #else //bug: light can go through edges of solid brushes
     if (front >= -ON_EPSILON && back >= -ON_EPSILON)
         return TestLine_r(tnode->children[0], p1f, p2f, start, stop
@@ -490,7 +491,7 @@ int TestLine_r( const int node, float p1f, float p2f, const vec3_t start, const 
 #ifdef HLRAD_OPAQUEINSKY_FIX
 		, skyhit
 #endif
-		);
+		, fraction );
 
     if (front < ON_EPSILON && back < ON_EPSILON)
         return TestLine_r(tnode->children[1], p1f, p2f, start, stop
@@ -500,7 +501,7 @@ int TestLine_r( const int node, float p1f, float p2f, const vec3_t start, const 
 #ifdef HLRAD_OPAQUEINSKY_FIX
 		, skyhit
 #endif
-		);
+		, fraction );
 
     side = front < 0;
 
@@ -517,10 +518,11 @@ int TestLine_r( const int node, float p1f, float p2f, const vec3_t start, const 
 #ifdef HLRAD_OPAQUEINSKY_FIX
 		, skyhit
 #endif
-		);
+		, fraction );
     if (r != CONTENTS_EMPTY)
     {
-        g_trace_fraction = midf;
+        if( fraction )
+            *fraction = midf;
         return r;
     }
     return TestLine_r(tnode->children[!side], midf, p2f, mid, stop
@@ -530,7 +532,7 @@ int TestLine_r( const int node, float p1f, float p2f, const vec3_t start, const 
 #ifdef HLRAD_OPAQUEINSKY_FIX
 		, skyhit
 #endif
-		);
+		, fraction );
 #endif
 }
 
@@ -538,10 +540,9 @@ int             TestLine(const vec3_t start, const vec3_t stop
 #ifdef HLRAD_OPAQUEINSKY_FIX
 						 , vec_t *skyhit
 #endif
-						 )
+						 , vec_t *fraction )
 {
-	g_trace_fraction = 1.0f; // set trace default fraction
-
+	if( fraction ) *fraction = 1.0f; // set trace default fraction
 #ifdef HLRAD_WATERBLOCKLIGHT
 	int linecontent = 0;
 #endif
@@ -552,7 +553,7 @@ int             TestLine(const vec3_t start, const vec3_t stop
 #ifdef HLRAD_OPAQUEINSKY_FIX
 		, skyhit
 #endif
-		);
+		, fraction );
 }
 
 #ifdef HLRAD_OPAQUE_NODE

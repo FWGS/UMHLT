@@ -67,6 +67,7 @@
 #define ZHLT_ENTITY_INFOSUNLIGHT //--vluzacn
 	#endif
 #define ZHLT_PLANETYPE_FIX // Very Important !! --vluzacn
+#define ZHLT_PLANETYPE_FIX2	// Important but needs to be more testing. g-cont
 #define ZHLT_WINDING_FIX // Very Important !! --vluzacn
 #define ZHLT_FILE_FUNCTIONS_FIX //--vluzacn
 #define ZHLT_MAX_MAP_LEAFS //--vluzacn

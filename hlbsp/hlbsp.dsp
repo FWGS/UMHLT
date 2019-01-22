@@ -58,8 +58,8 @@ TargetDir=\VHLT\temp\hlbsp\!release
 InputPath=\VHLT\temp\hlbsp\!release\hlbsp.exe
 SOURCE="$(InputPath)"
 
-"..\hlbsp31.exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(TargetDir)\hlbsp.exe "..\hlbsp31.exe"
+"..\hlbsp30.exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(TargetDir)\hlbsp.exe "..\hlbsp30.exe"
 
 # End Custom Build
 
@@ -96,8 +96,8 @@ TargetDir=\VHLT\temp\hlbsp\!debug
 InputPath=\VHLT\temp\hlbsp\!debug\hlbsp.exe
 SOURCE="$(InputPath)"
 
-"..\hlbsp31.exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(TargetDir)\hlbsp.exe "..\hlbsp31.exe"
+"..\hlbsp30.exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(TargetDir)\hlbsp.exe "..\hlbsp30.exe"
 
 # End Custom Build
 

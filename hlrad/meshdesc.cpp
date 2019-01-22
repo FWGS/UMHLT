@@ -522,7 +522,7 @@ bool CMeshDesc :: StudioConstructMesh( model_t *pModel )
 	static vec4_t q[MAXSTUDIOBONES];
 	int totalVertSize = 0;
 
-	for( int i = 0; i < phdr->numbones; i++, pbone++, panim++ ) 
+	for( i = 0; i < phdr->numbones; i++, pbone++, panim++ ) 
 	{
 		StudioCalcBoneQuaterion( pbone, panim, q[i] );
 		StudioCalcBonePosition( pbone, panim, pos[i] );

@@ -58,8 +58,8 @@ TargetDir=\VHLT\temp\hlrad\!release
 InputPath=\VHLT\temp\hlrad\!release\hlrad.exe
 SOURCE="$(InputPath)"
 
-"..\hlrad31.exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(TargetDir)\hlrad.exe "..\hlrad31.exe"
+"..\hlrad30.exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(TargetDir)\hlrad.exe "..\hlrad30.exe"
 
 # End Custom Build
 
@@ -96,8 +96,8 @@ TargetDir=\VHLT\temp\hlrad\!debug
 InputPath=\VHLT\temp\hlrad\!debug\hlrad.exe
 SOURCE="$(InputPath)"
 
-"..\hlrad31.exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(TargetDir)\hlrad.exe "..\hlrad31.exe"
+"..\hlrad30.exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(TargetDir)\hlrad.exe "..\hlrad30.exe"
 
 # End Custom Build
 

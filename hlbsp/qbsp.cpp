@@ -1479,11 +1479,7 @@ static bool     ProcessModel()
 		}
 		else
 		{
-#ifdef ZHLT_XASH2
-	        model->headnode[g_hullnum] = g_numclipnodes[g_hullnum - 1];
-#else
-	        model->headnode[g_hullnum] = g_numclipnodes;
-#endif
+                        model->headnode[g_hullnum] = g_numclipnodes;
 		    WriteClipNodes(nodes);
 		}
     }

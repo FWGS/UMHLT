@@ -32,9 +32,9 @@ Studio models are position independent, so the cache manager can move them.
 
 // studio limits
 #define MAXSTUDIOTRIANGLES		65535	// max triangles per model
-#define MAXSTUDIOVERTS		32768	// max vertices per submodel
+#define MAXSTUDIOVERTS		16384	// max vertices per submodel
 #define MAXSTUDIOSEQUENCES		256	// total animation sequences
-#define MAXSTUDIOSKINS		128	// total textures
+#define MAXSTUDIOSKINS		256	// total textures
 #define MAXSTUDIOSRCBONES		512	// bones allowed at source movement
 #define MAXSTUDIOBONES		128	// total bones actually used
 #define MAXSTUDIOMODELS		32	// sub-models per model
@@ -45,7 +45,7 @@ Studio models are position independent, so the cache manager can move them.
 #define MAXSTUDIOEVENTS		1024	// events per model
 #define MAXSTUDIOPIVOTS		256	// pivot points
 #define MAXSTUDIOBLENDS		16	// max anim blends
-#define MAXSTUDIOCONTROLLERS		8	// max controllers per model
+#define MAXSTUDIOCONTROLLERS		32	// max controllers per model
 #define MAXSTUDIOATTACHMENTS		4	// max attachments per model
 
 // client-side model flags
@@ -57,8 +57,9 @@ Studio models are position independent, so the cache manager can move them.
 #define STUDIO_ZOMGIB		0x0020	// small blood trail
 #define STUDIO_TRACER2		0x0040	// orange split trail + rotate
 #define STUDIO_TRACER3		0x0080	// purple trail
-#define STUDIO_DYNAMIC_LIGHT		0x0100	// dynamically get lighting from floor or ceil (flying monsters)
+#define STUDIO_AMBIENT_LIGHT		0x0100	// dynamically get lighting from floor or ceil (flying monsters)
 #define STUDIO_TRACE_HITBOX		0x0200	// always use hitbox trace instead of bbox
+#define STUDIO_FORCE_SKYLIGHT		0x0400	// always grab lightvalues from the sky settings (even if sky is invisible)
 
 #define STUDIO_HAS_BUMP		(1<<16)	// loadtime set
 
@@ -66,15 +67,15 @@ Studio models are position independent, so the cache manager can move them.
 #define STUDIO_NF_FLATSHADE		0x0001
 #define STUDIO_NF_CHROME		0x0002
 #define STUDIO_NF_FULLBRIGHT		0x0004
-#define STUDIO_NF_COLORMAP		0x0008	// can changed by colormap command
-#define STUDIO_NF_NOSMOOTH		0x0010	// rendering as semiblended
+#define STUDIO_NF_NOMIPS		0x0008	// ignore mip-maps
+#define STUDIO_NF_NOSMOOTH		0x0010	// don't smooth tangent space
 #define STUDIO_NF_ADDITIVE		0x0020	// rendering with additive mode
-#define STUDIO_NF_TRANSPARENT		0x0040	// use texture with alpha channel
+#define STUDIO_NF_MASKED		0x0040	// use texture with alpha channel
 #define STUDIO_NF_NORMALMAP		0x0080	// indexed normalmap
 #define STUDIO_NF_GLOSSMAP		0x0100	// glossmap
 #define STUDIO_NF_GLOSSPOWER		0x0200
 #define STUDIO_NF_LUMA		0x0400	// self-illuminate parts
-#define STUDIO_NF_ALPHASOLID		0x0800	// use with STUDIO_NF_TRANSPARENT to have solid alphatest surfaces for env_static
+#define STUDIO_NF_ALPHASOLID		0x0800	// use with STUDIO_NF_MASKED to have solid alphatest surfaces for env_static
 #define STUDIO_NF_TWOSIDE		0x1000	// render mesh as twosided
 
 #define STUDIO_NF_NODRAW		(1<<16)	// failed to create shader for this mesh
@@ -82,6 +83,8 @@ Studio models are position independent, so the cache manager can move them.
 #define STUDIO_NF_NOSUNLIGHT		(1<<18)	// failed to create sun light shader for this mesh
 #define STUDIO_DXT5_NORMALMAP		(1<<19)	// it's DXT5nm texture
 #define STUDIO_NF_HAS_ALPHA		(1<<20)	// external texture has alpha-channel
+
+#define STUDIO_NF_COLORMAP		(1<<30)	// can changed by colormap command
 #define STUDIO_NF_UV_COORDS		(1<<31)	// using half-float coords instead of ST
 
 // motion flags

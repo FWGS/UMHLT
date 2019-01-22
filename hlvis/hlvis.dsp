@@ -58,8 +58,8 @@ TargetDir=\VHLT\temp\hlvis\!release
 InputPath=\VHLT\temp\hlvis\!release\hlvis.exe
 SOURCE="$(InputPath)"
 
-"..\hlvis31.exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(TargetDir)\hlvis.exe "..\hlvis31.exe"
+"..\hlvis30.exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(TargetDir)\hlvis.exe "..\hlvis30.exe"
 
 # End Custom Build
 
@@ -96,8 +96,8 @@ TargetDir=\VHLT\temp\hlvis\!debug
 InputPath=\VHLT\temp\hlvis\!debug\hlvis.exe
 SOURCE="$(InputPath)"
 
-"..\hlvis31.exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(TargetDir)\hlvis.exe "..\hlvis31.exe"
+"..\hlvis30.exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(TargetDir)\hlvis.exe "..\hlvis30.exe"
 
 # End Custom Build
 

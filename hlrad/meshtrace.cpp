@@ -172,7 +172,7 @@ bool TraceMesh :: ClipRayToFace( const mfacet_t *facet )
 	if( facet->texture->flags & STUDIO_NF_ADDITIVE )
 		return false; // translucent
 
-	if( !( facet->texture->flags & STUDIO_NF_TRANSPARENT ))
+	if( !( facet->texture->flags & STUDIO_NF_MASKED ))
 		return true;
 
 	// try to avoid double shadows near triangle seams

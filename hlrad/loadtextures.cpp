@@ -347,6 +347,11 @@ void LoadTextureFromWad (radtexture_t *tex, const miptex_t *header)
 
 void LoadTextures ()
 {
+#ifdef ZHLT_NOWADDIR
+	char filename[_MAX_PATH];
+	safe_snprintf(filename, _MAX_PATH, "%s.wa_", g_Mapname);
+	if (!q_exists (filename)) g_notextures = true;
+#endif
 	if (!g_notextures)
 	{
 		Log ("Load Textures:\n");

@@ -1,5 +1,4 @@
 #include "qrad.h"
-#include "stringlib.h"
 
 #ifdef ZHLT_PARANOIA_BSP
 
@@ -130,6 +129,7 @@ float Engine_WorldLightDistanceFalloff( const dworldlight_t *wl, const vec3_t de
 void AddEmitSurfaceLights( const vec3_t vStart, vec3_t lightBoxColor[6] )
 {
 	vec3_t	wlOrigin;
+	vec_t	fraction;
 
 	for ( int iLight = 0; iLight < g_numworldlights; iLight++ )
 	{
@@ -144,7 +144,7 @@ void AddEmitSurfaceLights( const vec3_t vStart, vec3_t lightBoxColor[6] )
 		VectorCopy( wl->origin, wlOrigin );	// short to float
 
 		// Can this light see the point?
-		if( TestLine ( vStart, wlOrigin ) != CONTENTS_EMPTY )
+		if( TestLine ( vStart, wlOrigin, NULL, &fraction ) != CONTENTS_EMPTY )
 			continue;
 
 		// Add this light's contribution.
@@ -157,8 +157,8 @@ void AddEmitSurfaceLights( const vec3_t vStart, vec3_t lightBoxColor[6] )
 
 		float flAngleScale = Engine_WorldLightAngle( wl, wl->normal, vDeltaNorm, vDeltaNorm );
 
-//		if( g_trace_fraction != 1.0f ) Log( "trace fraction %g\n", g_trace_fraction );
-		float ratio = flDistanceScale * flAngleScale * g_trace_fraction;
+//		if( g_trace_fraction != 1.0f ) Log( "trace fraction %g\n", fraction );
+		float ratio = flDistanceScale * flAngleScale * fraction;
 		if ( ratio == 0 ) continue;
 
 		for ( int i = 0; i < 6; i++ )
@@ -238,7 +238,7 @@ static bool R_GetDirectLightFromSurface( dface_t *surf, const vec3_t point, ligh
 	{
 		const char *texname =  GetTextureByNumber(surf->texinfo);
 
-		if( !Q_strnicmp( texname, "sky", 3 ))
+		if( !strnicmp( texname, "sky", 3 ))
 			info->hitsky = true;
 		return false; // no lightmaps
 	}

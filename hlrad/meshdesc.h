@@ -44,9 +44,6 @@ typedef vec_t		vec4_t[4];	// x,y,z,w
 typedef vec_t		matrix3x4[3][4];
 
 #define Q_rint( x )		((x) < 0 ? ((int)((x)-0.5f)) : ((int)((x)+0.5f)))
-#ifndef __MSC_VER
-#define _inline inline
-#endif
 
 typedef struct mplane_s
 {

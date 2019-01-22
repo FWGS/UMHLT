@@ -63,7 +63,7 @@ brush_t *CopyCurrentBrush( entity_t *entity, const brush_t *brush )
 }
 #endif
 
-#ifdef HLCSG_HULLBRUSH
+#if defined HLCSG_HULLBRUSH || defined( ZHLT_PARANOIA_BSP )
 void DeleteCurrentEntity( entity_t *entity )
 {
 	if( entity != &g_entities[g_numentities - 1] )
@@ -93,7 +93,7 @@ void DeleteCurrentEntity( entity_t *entity )
 
 		memset( &g_brushsides[b->firstside], 0, b->numsides * sizeof( side_t ));
 		g_numbrushsides -= b->numsides;
-
+#ifdef HLCSG_HULLBRUSH
 		for( int h = 0; h < NUM_HULLS; h++ )
 		{
 			if( b->hullshapes[h] )
@@ -101,6 +101,7 @@ void DeleteCurrentEntity( entity_t *entity )
 				free( b->hullshapes[h] );
 			}
 		}
+#endif
 	}
 
 	memset( &g_mapbrushes[entity->firstbrush], 0, entity->numbrushes * sizeof( brush_t ));
